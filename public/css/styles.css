@@ -6,11 +6,21 @@
   box-sizing: border-box;
 }
 
+html, body {
+  height: 100%;
+}
+
 body {
   font-family: Arial, sans-serif;
   line-height: 1.6;
   background: #fff;
   color: #222;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
 }
 
 header {
@@ -145,10 +155,38 @@ footer {
   margin-top: 2rem;
 }
 
+.inventory-details {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+h1 {
+  text-align: center;
+}
+
+#error-message {
+  text-align: center;
+}
+
 /* Tablet and up */
 @media (min-width: 600px) {
   .upgrades-grid {
     grid-template-columns: repeat(4, 1fr);
+  }
+
+  .inventory-details {
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 20px;
   }
 }
 

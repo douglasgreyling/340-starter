@@ -64,4 +64,22 @@ Util.buildClassificationGrid = async function(data){
  **************************************** */
 Util.handleErrors = fn => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next)
 
+Util.buildInventoryDetails = async function(data){
+  let detail = '<div class="inventory-details">'
+
+  detail += '<img src="' + data.inv_image + '" alt="Image of ' + data.inv_make + ' ' + data.inv_model + ' on CSE Motors" />'
+  detail += '<div class="info">'
+  detail += '<h2>' + data.inv_make + ' ' + data.inv_model + '</h2>'
+  detail += '<hr />'
+  detail += '<p><span class="bold">Year: </span>' + data.inv_year + '</p>'
+  detail += '<p><span class="bold">Price: </span>$' + new Intl.NumberFormat('en-US').format(data.inv_price) + '</p>'
+  detail += '<p><span class="bold">Miles: </span>' + new Intl.NumberFormat('en-US').format(data.inv_miles) + '</p>'
+  detail += '<p><span class="bold">Color: </span>' + data.inv_color + '</p>'
+  detail += '<p><span class="bold">Description: </span>' + data.inv_description + '</p>'
+  detail += '</div>'
+  detail += '</div>'
+
+  return detail
+}
+
 module.exports = Util

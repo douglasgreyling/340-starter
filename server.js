@@ -12,6 +12,7 @@ const app = express()
 const static = require("./routes/static")
 const baseController = require("./controllers/baseController")
 const inventoryRoute = require("./routes/inventoryRoute")
+const errorRoute = require("./routes/errorRoute")
 const utilities = require("./utilities/")
 
 /* ***********************
@@ -27,7 +28,8 @@ app.set("layout", "./layouts/layout")
  *************************/
 app.use(static)
 app.get("/", utilities.handleErrors(baseController.buildHome))
-app.use("/inv", inventoryRoute)
+app.use("/inv", utilities.handleErrors(inventoryRoute))
+app.use("/error", utilities.handleErrors(errorRoute))
 app.use(async (req, res, next) => {
   next({ status: 404, message: 'Sorry, we appear to have lost that page.' })
 })
@@ -38,9 +40,18 @@ app.use(async (req, res, next) => {
 *************************/
 app.use(async (err, req, res, next) => {
   let nav = await utilities.getNav()
+
   console.error(`Error at: "${req.originalUrl}": ${err.message}`)
-  if(err.status == 404){ message = err.message} else {message = 'Oh no! There was a crash. Maybe try a different route?'}
-  res.render("errors/error", {
+
+  let message = 'An error occurred.'
+
+  if (err.status == 404) {
+    message = err.message
+  } else if (err.status == 500 || !err.status) {
+    message = 'Oh no! There was a crash. Maybe try a different route?'
+  }
+
+  res.status(err.status || 500).render("errors/error", {
     title: err.status || 'Server Error',
     message,
     nav
