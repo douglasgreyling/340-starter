@@ -9,6 +9,11 @@ router.get(
   utilities.checkLogin,
   utilities.handleErrors(accController.buildManagement),
 );
+router.get(
+  "/update/:accountId",
+  utilities.checkLogin,
+  utilities.handleErrors(accController.buildUpdateAccount),
+);
 router.get("/login", accController.buildLogin);
 router.post(
   "/login",
@@ -23,5 +28,20 @@ router.post(
   regValidate.checkRegData,
   utilities.handleErrors(accController.registerAccount),
 );
+router.post(
+  "/update",
+  utilities.checkLogin,
+  regValidate.accountUpdateRules(),
+  regValidate.checkAccountUpdateData,
+  utilities.handleErrors(accController.updateAccount),
+);
+router.post(
+  "/update-password",
+  utilities.checkLogin,
+  regValidate.passwordUpdateRules(),
+  regValidate.checkPasswordUpdateData,
+  utilities.handleErrors(accController.updatePassword),
+);
+router.get("/logout", utilities.handleErrors(accController.accountLogout));
 
 module.exports = router;

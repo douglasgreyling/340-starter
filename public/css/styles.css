@@ -244,6 +244,7 @@ input[type="submit"]:hover {
 
 input[type="text"],
 input[type="number"],
+input[type="hidden"],
 textarea,
 select {
   width: 100%;
@@ -274,6 +275,17 @@ input[type="submit"]:hover {
   background-color: #0056b3;
 }
 
+input[type="submit"]:disabled {
+  background-color: #6c757d;
+  color: #fff;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+input[type="submit"]:disabled:hover {
+  background-color: #6c757d;
+}
+
 .notice {
   background-color: #f8d7da;
   border: 1px solid #f5c6cb;
@@ -281,6 +293,12 @@ input[type="submit"]:hover {
   padding: 10px;
   border-radius: 4px;
   margin-bottom: 15px;
+}
+
+input[type="hidden"] {
+  width: auto;
+  padding: 0;
+  border: none;
 }
 
 /* Tablet and up */

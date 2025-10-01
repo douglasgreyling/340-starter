@@ -1,0 +1,72 @@
+<% if (title) { %>
+  <h1><%= title %></h1>
+<% } else {
+  res.redirect('/')
+} %>
+
+<%- messages() %>
+
+<% if (errors) { %>
+  <ul class="notice">
+    <% errors.array().forEach(error => { %>
+      <li><%= error.msg %></li>
+    <% }) %>
+  </ul>
+<% } %>
+
+<p>Confirm Deletion - The delete is permanent.</p>
+
+<form action="/inv/delete" method="post">
+  <fieldset>
+    <legend>Delete Vehicle Information</legend>
+
+    <!-- Hidden field for inventory ID -->
+    <input type="hidden" name="inv_id" value="<%= locals.inv_id || '' %>">
+
+    <div class="form-row">
+      <label for="inv_make">Make:</label>
+      <input
+        type="text"
+        id="inv_make"
+        name="inv_make"
+        readonly
+        value="<%= locals.inv_make || '' %>"
+      >
+    </div>
+
+    <div class="form-row">
+      <label for="inv_model">Model:</label>
+      <input
+        type="text"
+        id="inv_model"
+        name="inv_model"
+        readonly
+        value="<%= locals.inv_model || '' %>"
+      >
+    </div>
+
+    <div class="form-row">
+      <label for="inv_year">Year:</label>
+      <input
+        type="text"
+        id="inv_year"
+        name="inv_year"
+        readonly
+        value="<%= locals.inv_year || '' %>"
+      >
+    </div>
+
+    <div class="form-row">
+      <label for="inv_price">Price:</label>
+      <input
+        type="text"
+        id="inv_price"
+        name="inv_price"
+        readonly
+        value="$<%= locals.inv_price ? Number(locals.inv_price).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : '' %>"
+      >
+    </div>
+
+    <input type="submit" value="Delete Vehicle">
+  </fieldset>
+</form>
