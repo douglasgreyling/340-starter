@@ -1,0 +1,22 @@
+<% if (title) { %>
+  <h1><%= title %></h1>
+<% } else {
+  res.redirect('/')
+} %>
+
+<%- messages() %>
+
+<form action="/account/login" method="post" id="loginForm">
+  <label for="account_email">Email Address</label>
+  <input type="email" id="account_email" name="account_email" required />
+  <label for="account_password">Password</label>
+  <input type="password" id="account_password" name="account_password" required />
+  <small class="password-requirements">Passwords must be at least 12 characters and contain at least 1 uppercase letter, 1 number, and 1 special character.</small>
+
+  <button type="submit" id="loginButton" name="loginButton">Login</button>
+
+  <span>
+    No account?
+    <a href="/account/register">Sign-up</a>
+  </span>
+</form>

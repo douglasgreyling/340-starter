@@ -175,6 +175,31 @@ h1 {
   text-align: center;
 }
 
+#loginForm, #registerForm {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  max-width: 300px;
+  background: gray;
+  padding: 10px;
+  border-radius: 5px;
+  color: white;
+}
+
+#loginForm button, #registerForm button {
+  margin-top: 10px;
+  background: #0a6bb0;
+  color: white;
+  border: none;
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#loginForm span {
+  text-align: center;
+}
+
 /* Tablet and up */
 @media (min-width: 600px) {
   .upgrades-grid {
