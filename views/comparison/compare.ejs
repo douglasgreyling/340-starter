@@ -1,0 +1,445 @@
+<% if (title) { %>
+  <h1><%= title %></h1>
+<% } else {
+  res.redirect('/')
+} %>
+
+<%- messages() %>
+
+<div class="comparison-header">
+  <a href="/compare/select" class="btn btn-secondary">← Select Different Vehicles</a>
+
+  <% if (locals.loggedin) { %>
+    <button onclick="showSaveModal()" class="btn btn-primary">Save This Comparison</button>
+  <% } else { %>
+    <p class="login-prompt">
+      <a href="/account/login">Login</a> to save your comparisons for later viewing.
+    </p>
+  <% } %>
+</div>
+
+<div class="comparison-container">
+  <div class="comparison-table">
+
+    <div class="comparison-row image-row">
+      <div class="spec-label">Vehicle</div>
+
+      <% if (vehicles.vehicle1) { %>
+        <div class="vehicle-column">
+          <img src="<%= vehicles.vehicle1.inv_image %>"
+               alt="<%= vehicles.vehicle1.inv_make %> <%= vehicles.vehicle1.inv_model %>"
+               onerror="this.src='/images/vehicles/no-image.png'">
+          <h3><%= vehicles.vehicle1.inv_make %> <%= vehicles.vehicle1.inv_model %></h3>
+          <p class="vehicle-year">(<%= vehicles.vehicle1.inv_year %>)</p>
+        </div>
+      <% } %>
+
+      <% if (vehicles.vehicle2) { %>
+        <div class="vehicle-column">
+          <img src="<%= vehicles.vehicle2.inv_image %>"
+               alt="<%= vehicles.vehicle2.inv_make %> <%= vehicles.vehicle2.inv_model %>"
+               onerror="this.src='/images/vehicles/no-image.png'">
+          <h3><%= vehicles.vehicle2.inv_make %> <%= vehicles.vehicle2.inv_model %></h3>
+          <p class="vehicle-year">(<%= vehicles.vehicle2.inv_year %>)</p>
+        </div>
+      <% } %>
+
+      <% if (vehicles.vehicle3) { %>
+        <div class="vehicle-column">
+          <img src="<%= vehicles.vehicle3.inv_image %>"
+               alt="<%= vehicles.vehicle3.inv_make %> <%= vehicles.vehicle3.inv_model %>"
+               onerror="this.src='/images/vehicles/no-image.png'">
+          <h3><%= vehicles.vehicle3.inv_make %> <%= vehicles.vehicle3.inv_model %></h3>
+          <p class="vehicle-year">(<%= vehicles.vehicle3.inv_year %>)</p>
+        </div>
+      <% } %>
+    </div>
+
+    <div class="comparison-row">
+      <div class="spec-label">Price</div>
+
+      <% if (vehicles.vehicle1) { %>
+        <div class="vehicle-column">
+          <span class="price">$<%= Number(vehicles.vehicle1.inv_price).toLocaleString('en-US') %></span>
+        </div>
+      <% } %>
+
+      <% if (vehicles.vehicle2) { %>
+        <div class="vehicle-column">
+          <span class="price">$<%= Number(vehicles.vehicle2.inv_price).toLocaleString('en-US') %></span>
+        </div>
+      <% } %>
+
+      <% if (vehicles.vehicle3) { %>
+        <div class="vehicle-column">
+          <span class="price">$<%= Number(vehicles.vehicle3.inv_price).toLocaleString('en-US') %></span>
+        </div>
+      <% } %>
+    </div>
+
+    <div class="comparison-row">
+      <div class="spec-label">Year</div>
+
+      <% if (vehicles.vehicle1) { %>
+        <div class="vehicle-column"><%= vehicles.vehicle1.inv_year %></div>
+      <% } %>
+
+      <% if (vehicles.vehicle2) { %>
+        <div class="vehicle-column"><%= vehicles.vehicle2.inv_year %></div>
+      <% } %>
+
+      <% if (vehicles.vehicle3) { %>
+        <div class="vehicle-column"><%= vehicles.vehicle3.inv_year %></div>
+      <% } %>
+    </div>
+
+    <div class="comparison-row">
+      <div class="spec-label">Mileage</div>
+
+      <% if (vehicles.vehicle1) { %>
+        <div class="vehicle-column"><%= Number(vehicles.vehicle1.inv_miles).toLocaleString('en-US') %> miles</div>
+      <% } %>
+
+      <% if (vehicles.vehicle2) { %>
+        <div class="vehicle-column"><%= Number(vehicles.vehicle2.inv_miles).toLocaleString('en-US') %> miles</div>
+      <% } %>
+
+      <% if (vehicles.vehicle3) { %>
+        <div class="vehicle-column"><%= Number(vehicles.vehicle3.inv_miles).toLocaleString('en-US') %> miles</div>
+      <% } %>
+    </div>
+
+    <div class="comparison-row">
+      <div class="spec-label">Color</div>
+
+      <% if (vehicles.vehicle1) { %>
+        <div class="vehicle-column"><%= vehicles.vehicle1.inv_color %></div>
+      <% } %>
+
+      <% if (vehicles.vehicle2) { %>
+        <div class="vehicle-column"><%= vehicles.vehicle2.inv_color %></div>
+      <% } %>
+
+      <% if (vehicles.vehicle3) { %>
+        <div class="vehicle-column"><%= vehicles.vehicle3.inv_color %></div>
+      <% } %>
+    </div>
+
+    <div class="comparison-row">
+      <div class="spec-label">Classification</div>
+
+      <% if (vehicles.vehicle1) { %>
+        <div class="vehicle-column"><%= vehicles.vehicle1.classification_name %></div>
+      <% } %>
+
+      <% if (vehicles.vehicle2) { %>
+        <div class="vehicle-column"><%= vehicles.vehicle2.classification_name %></div>
+      <% } %>
+
+      <% if (vehicles.vehicle3) { %>
+        <div class="vehicle-column"><%= vehicles.vehicle3.classification_name %></div>
+      <% } %>
+    </div>
+
+    <div class="comparison-row description-row">
+      <div class="spec-label">Description</div>
+
+      <% if (vehicles.vehicle1) { %>
+        <div class="vehicle-column">
+          <div class="description-text"><%= vehicles.vehicle1.inv_description %></div>
+        </div>
+      <% } %>
+
+      <% if (vehicles.vehicle2) { %>
+        <div class="vehicle-column">
+          <div class="description-text"><%= vehicles.vehicle2.inv_description %></div>
+        </div>
+      <% } %>
+
+      <% if (vehicles.vehicle3) { %>
+        <div class="vehicle-column">
+          <div class="description-text"><%= vehicles.vehicle3.inv_description %></div>
+        </div>
+      <% } %>
+    </div>
+
+    <div class="comparison-row action-row">
+      <div class="spec-label">Actions</div>
+
+      <% if (vehicles.vehicle1) { %>
+        <div class="vehicle-column">
+          <a href="/inv/detail/<%= vehicles.vehicle1.inv_id %>" class="btn btn-outline">View Details</a>
+        </div>
+      <% } %>
+
+      <% if (vehicles.vehicle2) { %>
+        <div class="vehicle-column">
+          <a href="/inv/detail/<%= vehicles.vehicle2.inv_id %>" class="btn btn-outline">View Details</a>
+        </div>
+      <% } %>
+
+      <% if (vehicles.vehicle3) { %>
+        <div class="vehicle-column">
+          <a href="/inv/detail/<%= vehicles.vehicle3.inv_id %>" class="btn btn-outline">View Details</a>
+        </div>
+      <% } %>
+    </div>
+
+  </div>
+</div>
+
+<% if (locals.loggedin) { %>
+<div id="saveModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeSaveModal()">&times;</span>
+    <h2>Save Comparison</h2>
+
+    <form action="/compare/save" method="POST">
+      <input type="hidden" name="vehicle1_id" value="<%= vehicleIds.vehicle1 || '' %>">
+      <input type="hidden" name="vehicle2_id" value="<%= vehicleIds.vehicle2 || '' %>">
+      <input type="hidden" name="vehicle3_id" value="<%= vehicleIds.vehicle3 || '' %>">
+
+      <div class="form-group">
+        <label for="comparison_name">Comparison Name *</label>
+        <input type="text"
+               id="comparison_name"
+               name="comparison_name"
+               required
+               maxlength="100"
+               placeholder="e.g., Sports Car Showdown">
+      </div>
+
+      <div class="form-group">
+        <label for="comparison_description">Description (Optional)</label>
+        <textarea id="comparison_description"
+                  name="comparison_description"
+                  maxlength="500"
+                  rows="3"
+                  placeholder="Add notes about this comparison..."></textarea>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" onclick="closeSaveModal()" class="btn btn-secondary">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save Comparison</button>
+      </div>
+    </form>
+  </div>
+</div>
+<% } %>
+
+<script src="/js/comparison-view.js"></script>
+
+<style>
+.comparison-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  text-decoration: none;
+  display: inline-block;
+  font-weight: 500;
+  text-align: center;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.btn-primary { background: #007bff; color: white; border-color: #007bff; }
+.btn-secondary { background: #6c757d; color: white; border-color: #6c757d; }
+.btn-outline { background: transparent; color: #007bff; border-color: #007bff; }
+
+.btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.login-prompt {
+  color: #6c757d;
+  font-style: italic;
+}
+
+.comparison-container {
+  overflow-x: auto;
+}
+
+.comparison-table {
+  display: table;
+  width: 100%;
+  min-width: 600px;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.comparison-row {
+  display: table-row;
+}
+
+.comparison-row:nth-child(even) {
+  background-color: #f8f9fa;
+}
+
+.spec-label,
+.vehicle-column {
+  display: table-cell;
+  padding: 1rem;
+  border-bottom: 1px solid #dee2e6;
+  vertical-align: top;
+}
+
+.spec-label {
+  background-color: #e9ecef;
+  font-weight: bold;
+  color: #495057;
+  width: 150px;
+  min-width: 150px;
+}
+
+.vehicle-column {
+  text-align: center;
+  min-width: 200px;
+}
+
+.image-row .vehicle-column {
+  padding: 1.5rem 1rem;
+}
+
+.image-row img {
+  width: 180px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.image-row h3 {
+  margin: 0.5rem 0 0.25rem 0;
+  color: #495057;
+}
+
+.vehicle-year {
+  color: #6c757d;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.price {
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #28a745;
+}
+
+.description-row .vehicle-column {
+  text-align: left;
+}
+
+.description-text {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  max-height: 100px;
+  overflow-y: auto;
+}
+
+.action-row .vehicle-column {
+  padding: 1.5rem 1rem;
+}
+
+/* Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+  background-color: white;
+  margin: 5% auto;
+  padding: 2rem;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+}
+
+.close {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  color: #6c757d;
+}
+
+.close:hover {
+  color: #495057;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  color: #495057;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.form-group textarea {
+  resize: vertical;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .comparison-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .comparison-table {
+    font-size: 0.9rem;
+  }
+
+  .spec-label {
+    width: 100px;
+    min-width: 100px;
+  }
+
+  .vehicle-column {
+    min-width: 150px;
+  }
+
+  .image-row img {
+    width: 120px;
+    height: 80px;
+  }
+}
+</style>

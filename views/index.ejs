@@ -45,3 +45,238 @@
     </ul>
   </div>
 </section>
+
+<section class="comparison-section">
+  <div class="comparison-content">
+    <h2>Vehicle Comparison Tool</h2>
+    <p>Compare vehicles side by side to find your perfect match! Select 2-3 vehicles and see detailed comparisons of features, pricing, and specifications.</p>
+
+    <div class="comparison-actions">
+      <div class="action-card">
+        <h3>🔍 Start Comparing</h3>
+        <p>Select vehicles from our inventory and compare them side by side</p>
+        <a href="/compare/select" class="btn btn-primary">Compare Vehicles</a>
+      </div>
+
+      <div class="action-card">
+        <h3>📊 Popular Comparisons</h3>
+        <p>See what vehicles other customers are comparing</p>
+        <a href="/compare/popular" class="btn btn-secondary">View Popular</a>
+      </div>
+
+      <% if (locals.loggedin) { %>
+        <div class="action-card">
+          <h3>💾 My Comparisons</h3>
+          <p>Manage your saved vehicle comparisons</p>
+          <a href="/compare/my-comparisons" class="btn btn-accent">My Saved</a>
+        </div>
+      <% } else { %>
+        <div class="action-card">
+          <h3>🔐 Save Comparisons</h3>
+          <p>Login to save and manage your comparisons</p>
+          <a href="/account/login" class="btn btn-outline">Login to Save</a>
+        </div>
+      <% } %>
+    </div>
+
+    <div class="comparison-features">
+      <h3>Why Use Our Comparison Tool?</h3>
+      <div class="features-grid">
+        <div class="feature">
+          <span class="feature-icon">⚡</span>
+          <strong>Quick & Easy</strong>
+          <p>Select and compare in just a few clicks</p>
+        </div>
+        <div class="feature">
+          <span class="feature-icon">📱</span>
+          <strong>Mobile Friendly</strong>
+          <p>Works perfectly on all devices</p>
+        </div>
+        <div class="feature">
+          <span class="feature-icon">🎯</span>
+          <strong>Smart Highlighting</strong>
+          <p>Best values automatically highlighted</p>
+        </div>
+        <div class="feature">
+          <span class="feature-icon">📤</span>
+          <strong>Share & Print</strong>
+          <p>Share comparisons or print for reference</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+.comparison-section {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 3rem 1rem;
+  margin: 2rem 0;
+}
+
+.comparison-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.comparison-content h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.comparison-content > p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  opacity: 0.9;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.comparison-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.action-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.action-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.action-card h3 {
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.action-card p {
+  opacity: 0.9;
+  margin-bottom: 1.5rem;
+  line-height: 1.4;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.btn-primary {
+  background: #28a745;
+  color: white;
+}
+
+.btn-secondary {
+  background: #17a2b8;
+  color: white;
+}
+
+.btn-accent {
+  background: #ffc107;
+  color: #212529;
+}
+
+.btn-outline {
+  background: transparent;
+  color: white;
+  border-color: white;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.btn-primary:hover { background: #218838; }
+.btn-secondary:hover { background: #138496; }
+.btn-accent:hover { background: #e0a800; }
+.btn-outline:hover { background: white; color: #667eea; }
+
+.comparison-features {
+  text-align: center;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.comparison-features h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.feature {
+  text-align: center;
+}
+
+.feature-icon {
+  display: block;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.feature strong {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.feature p {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  margin: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .comparison-section {
+    padding: 2rem 1rem;
+  }
+
+  .comparison-content h2 {
+    font-size: 2rem;
+  }
+
+  .comparison-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .action-card {
+    padding: 1.5rem;
+  }
+}
+</style>

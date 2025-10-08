@@ -1,0 +1,285 @@
+<% if (title) { %>
+  <h1><%= title %></h1>
+<% } else {
+  res.redirect('/')
+} %>
+
+<%- messages() %>
+
+<% if (errors) { %>
+  <ul class="notice">
+    <% errors.array().forEach(error => { %>
+      <li><%= error.msg %></li>
+    <% }) %>
+  </ul>
+<% } %>
+
+<div class="comparison-intro">
+  <p>Select up to 3 vehicles to compare side-by-side. Choose vehicles with similar features for the most meaningful comparison.</p>
+</div>
+
+<form id="comparisonForm" action="/compare/view" method="GET">
+  <div class="comparison-selection">
+
+    <div class="filter-section">
+      <h3>Filter by Classification</h3>
+      <select id="classificationFilter">
+        <option value="">All Classifications</option>
+        <% classifications.forEach(function(classification) { %>
+          <option value="<%= classification.classification_id %>">
+            <%= classification.classification_name %>
+          </option>
+        <% }); %>
+      </select>
+    </div>
+
+    <div class="vehicle-selection-grid">
+      <div class="vehicle-selector">
+        <h3>Vehicle 1 <span class="required">*</span></h3>
+        <div class="selected-vehicle" id="selected-vehicle-1">
+          <p class="placeholder">Click a vehicle below to select</p>
+        </div>
+        <input type="hidden" name="vehicle1" id="vehicle1-input" required>
+      </div>
+
+      <div class="vehicle-selector">
+        <h3>Vehicle 2 <span class="optional">(Optional)</span></h3>
+        <div class="selected-vehicle" id="selected-vehicle-2">
+          <p class="placeholder">Click a vehicle below to select</p>
+        </div>
+        <input type="hidden" name="vehicle2" id="vehicle2-input">
+        <button type="button" class="clear-selection" onclick="clearVehicle(2)">Clear</button>
+      </div>
+
+      <div class="vehicle-selector">
+        <h3>Vehicle 3 <span class="optional">(Optional)</span></h3>
+        <div class="selected-vehicle" id="selected-vehicle-3">
+          <p class="placeholder">Click a vehicle below to select</p>
+        </div>
+        <input type="hidden" name="vehicle3" id="vehicle3-input">
+        <button type="button" class="clear-selection" onclick="clearVehicle(3)">Clear</button>
+      </div>
+
+    </div>
+
+    <div class="action-section">
+      <button type="submit" id="compareBtn" disabled>Compare Selected Vehicles</button>
+      <p class="help-text">Select at least one vehicle to enable comparison</p>
+    </div>
+
+  </div>
+</form>
+
+<div class="available-vehicles">
+  <h3>Available Vehicles</h3>
+  <div class="vehicle-grid" id="vehicleGrid">
+    <% vehicles.forEach(function(vehicle) { %>
+      <div class="vehicle-card"
+           data-vehicle-id="<%= vehicle.inv_id %>"
+           data-classification="<%= vehicle.classification_name %>"
+           data-classification-id="<%= vehicle.classification_id %>"
+           onclick="selectVehicle('<%= vehicle.inv_id %>', '<%= vehicle.inv_make %>', '<%= vehicle.inv_model %>', '<%= vehicle.inv_year %>', '<%= vehicle.inv_thumbnail %>', '<%= vehicle.inv_price %>')">
+
+        <img src="<%= vehicle.inv_thumbnail %>"
+             alt="<%= vehicle.inv_make %> <%= vehicle.inv_model %>"
+             onerror="this.src='/images/vehicles/no-image-tn.png'">
+
+        <div class="vehicle-info">
+          <h4><%= vehicle.inv_make %> <%= vehicle.inv_model %></h4>
+          <p class="year">Year: <%= vehicle.inv_year %></p>
+          <p class="price">$<%= Number(vehicle.inv_price).toLocaleString('en-US') %></p>
+          <p class="classification"><%= vehicle.classification_name %></p>
+        </div>
+
+        <div class="selection-overlay">
+          <span class="checkmark">✓</span>
+        </div>
+      </div>
+    <% }); %>
+  </div>
+</div>
+
+<script src="/js/comparison-select.js"></script>
+
+<style>
+.comparison-intro {
+  text-align: center;
+}
+
+.comparison-selection {
+  background: #f8f9fa;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border-radius: 8px;
+}
+
+.filter-section {
+  margin-bottom: 2rem;
+}
+
+.filter-section select {
+  width: 100%;
+  max-width: 300px;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.vehicle-selection-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.vehicle-selector {
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 2px solid #e9ecef;
+}
+
+.vehicle-selector h3 {
+  margin: 0 0 1rem 0;
+  color: #495057;
+}
+
+.required { color: #dc3545; }
+.optional { color: #6c757d; font-size: 0.9em; }
+
+.selected-vehicle {
+  min-height: 120px;
+  border: 2px dashed #dee2e6;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  background: #f8f9fa;
+}
+
+.selected-vehicle.has-selection {
+  border: 2px solid #28a745;
+  background: white;
+}
+
+.selected-vehicle .placeholder {
+  color: #6c757d;
+  font-style: italic;
+}
+
+.clear-selection {
+  margin-top: 0.5rem;
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.action-section {
+  text-align: center;
+}
+
+.action-section button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 4px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.action-section button:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+}
+
+.action-section button:not(:disabled):hover {
+  background: #0056b3;
+}
+
+.help-text {
+  margin: 0.5rem 0 0 0;
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+.vehicle-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.vehicle-card {
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.vehicle-card:hover {
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transform: translateY(-2px);
+}
+
+.vehicle-card.selected {
+  border-color: #28a745;
+  background: #f8fff8;
+}
+
+.vehicle-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.vehicle-info h4 {
+  margin: 1rem 0 0.5rem 0;
+  color: #495057;
+}
+
+.vehicle-info p {
+  margin: 0.25rem 0;
+  color: #6c757d;
+}
+
+.vehicle-info .price {
+  font-weight: bold;
+  color: #28a745;
+  font-size: 1.1rem;
+}
+
+.selection-overlay {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #28a745;
+  color: white;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.vehicle-card.selected .selection-overlay {
+  display: flex;
+}
+
+.hidden {
+  display: none !important;
+}
+</style>

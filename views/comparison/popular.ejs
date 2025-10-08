@@ -1,0 +1,438 @@
+<% if (title) { %>
+  <h1><%= title %></h1>
+<% } else {
+  res.redirect('/')
+} %>
+
+<%- messages() %>
+
+<div class="popular-intro">
+  <p>See what vehicle comparisons are trending with our customers. These popular comparisons can help you discover great vehicles to compare.</p>
+</div>
+
+<div class="page-actions">
+  <a href="/compare/select" class="btn btn-primary">Create New Comparison</a>
+  <% if (locals.loggedin) { %>
+    <a href="/compare/my-comparisons" class="btn btn-outline">My Comparisons</a>
+  <% } %>
+</div>
+
+<% if (comparisons && comparisons.length > 0) { %>
+  <div class="popular-grid">
+    <% comparisons.forEach(function(comparison, index) { %>
+      <div class="popular-card">
+        <div class="card-header">
+          <div class="popularity-rank">
+            <span class="rank-number">#<%= index + 1 %></span>
+            <div class="rank-details">
+              <span class="comparison-count"><%= comparison.comparison_count %> comparisons</span>
+              <span class="trend-indicator">🔥</span>
+            </div>
+          </div>
+
+          <% if (comparison.comparison_name) { %>
+            <h3 class="comparison-title"><%= comparison.comparison_name %></h3>
+          <% } else { %>
+            <h3 class="comparison-title">Popular Vehicle Combination</h3>
+          <% } %>
+        </div>
+
+        <div class="vehicles-showcase">
+          <% if (comparison.vehicle1_name) { %>
+            <div class="vehicle-item">
+              <% if (comparison.vehicle1_thumbnail) { %>
+                <img src="<%= comparison.vehicle1_thumbnail %>"
+                     alt="<%= comparison.vehicle1_name %>"
+                     onerror="this.src='/images/vehicles/no-image-tn.png'">
+              <% } %>
+              <div class="vehicle-info">
+                <h4><%= comparison.vehicle1_name %></h4>
+                <p class="vehicle-price">$<%= Number(comparison.vehicle1_price).toLocaleString('en-US') %></p>
+              </div>
+            </div>
+          <% } %>
+
+          <% if (comparison.vehicle2_name) { %>
+            <div class="vs-divider">vs</div>
+            <div class="vehicle-item">
+              <% if (comparison.vehicle2_thumbnail) { %>
+                <img src="<%= comparison.vehicle2_thumbnail %>"
+                     alt="<%= comparison.vehicle2_name %>"
+                     onerror="this.src='/images/vehicles/no-image-tn.png'">
+              <% } %>
+              <div class="vehicle-info">
+                <h4><%= comparison.vehicle2_name %></h4>
+                <p class="vehicle-price">$<%= Number(comparison.vehicle2_price).toLocaleString('en-US') %></p>
+              </div>
+            </div>
+          <% } %>
+
+          <% if (comparison.vehicle3_name) { %>
+            <div class="vs-divider">vs</div>
+            <div class="vehicle-item">
+              <% if (comparison.vehicle3_thumbnail) { %>
+                <img src="<%= comparison.vehicle3_thumbnail %>"
+                     alt="<%= comparison.vehicle3_name %>"
+                     onerror="this.src='/images/vehicles/no-image-tn.png'">
+              <% } %>
+              <div class="vehicle-info">
+                <h4><%= comparison.vehicle3_name %></h4>
+                <p class="vehicle-price">$<%= Number(comparison.vehicle3_price).toLocaleString('en-US') %></p>
+              </div>
+            </div>
+          <% } %>
+        </div>
+
+        <div class="card-actions">
+          <a href="/compare/view?vehicle1=<%= comparison.vehicle1_id %><% if (comparison.vehicle2_id) { %>&vehicle2=<%= comparison.vehicle2_id %><% } %><% if (comparison.vehicle3_id) { %>&vehicle3=<%= comparison.vehicle3_id %><% } %>"
+             class="btn btn-primary">Compare These Vehicles</a>
+
+          <div class="popularity-stats">
+            <span class="stat-item">
+              <strong><%= comparison.comparison_count %></strong>
+              <small>times compared</small>
+            </span>
+          </div>
+        </div>
+      </div>
+    <% }); %>
+  </div>
+<% } else { %>
+  <div class="empty-state">
+    <div class="empty-content">
+      <h3>No Popular Comparisons Yet</h3>
+      <p>Be the first to create a comparison that others will want to try!</p>
+      <a href="/compare/select" class="btn btn-primary btn-large">Create First Comparison</a>
+    </div>
+  </div>
+<% } %>
+
+<div class="popular-info">
+  <h3>How Popular Comparisons Work</h3>
+  <div class="info-grid">
+    <div class="info-item">
+      <span class="info-icon">📊</span>
+      <strong>Data-Driven</strong>
+      <p>Based on real comparison activity from our users</p>
+    </div>
+    <div class="info-item">
+      <span class="info-icon">🔄</span>
+      <strong>Updated Regularly</strong>
+      <p>Rankings update as new comparisons are made</p>
+    </div>
+    <div class="info-item">
+      <span class="info-icon">🎯</span>
+      <strong>Relevant Matches</strong>
+      <p>Discover vehicles others find worth comparing</p>
+    </div>
+    <div class="info-item">
+      <span class="info-icon">⚡</span>
+      <strong>Quick Start</strong>
+      <p>Jump right into popular vehicle combinations</p>
+    </div>
+  </div>
+</div>
+
+<style>
+.popular-intro {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.popular-intro p {
+  font-size: 1.1rem;
+  color: #6c757d;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.page-actions {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  text-decoration: none;
+  display: inline-block;
+  font-weight: 600;
+  text-align: center;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-primary { background: #007bff; color: white; border-color: #007bff; }
+.btn-outline { background: transparent; color: #007bff; border-color: #007bff; }
+.btn-large { padding: 1rem 2rem; font-size: 1.1rem; }
+
+.btn:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.popular-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.popular-card {
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+.popular-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.card-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1.5rem;
+}
+
+.popularity-rank {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.rank-number {
+  font-size: 1.5rem;
+  font-weight: bold;
+  background: rgba(255,255,255,0.2);
+  padding: 0.5rem 0.75rem;
+  border-radius: 20px;
+}
+
+.rank-details {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.comparison-count {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.trend-indicator {
+  font-size: 1.2rem;
+}
+
+.comparison-title {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.vehicles-showcase {
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.vehicle-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-width: 120px;
+  max-width: 150px;
+}
+
+.vehicle-item img {
+  width: 100px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+
+.vehicle-info h4 {
+  font-size: 0.9rem;
+  margin: 0 0 0.25rem 0;
+  color: #495057;
+  line-height: 1.2;
+}
+
+.vehicle-price {
+  font-size: 0.85rem;
+  color: #28a745;
+  font-weight: 600;
+  margin: 0;
+}
+
+.vs-divider {
+  color: #6c757d;
+  font-weight: bold;
+  font-size: 1.1rem;
+  padding: 0 0.5rem;
+}
+
+.card-actions {
+  padding: 1.5rem;
+  border-top: 1px solid #e9ecef;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.popularity-stats {
+  display: flex;
+  gap: 1rem;
+}
+
+.stat-item {
+  text-align: center;
+  color: #6c757d;
+}
+
+.stat-item strong {
+  display: block;
+  font-size: 1.1rem;
+  color: #495057;
+}
+
+.stat-item small {
+  font-size: 0.8rem;
+}
+
+.empty-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  text-align: center;
+}
+
+.empty-content {
+  background: #f8f9fa;
+  padding: 3rem;
+  border-radius: 12px;
+  border: 2px dashed #dee2e6;
+}
+
+.empty-content h3 {
+  color: #6c757d;
+  margin-bottom: 1rem;
+}
+
+.empty-content p {
+  color: #6c757d;
+  margin-bottom: 2rem;
+}
+
+.popular-info {
+  background: #f8f9fa;
+  padding: 2rem;
+  border-radius: 12px;
+  margin-top: 2rem;
+}
+
+.popular-info h3 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #495057;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.info-item {
+  text-align: center;
+  padding: 1rem;
+}
+
+.info-icon {
+  display: block;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.info-item strong {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #495057;
+  font-size: 1.1rem;
+}
+
+.info-item p {
+  color: #6c757d;
+  font-size: 0.9rem;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .popular-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .vehicles-showcase {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .vs-divider {
+    padding: 0;
+  }
+
+  .card-actions {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .page-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .info-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .popular-card {
+    margin: 0 -1rem;
+  }
+
+  .card-header,
+  .vehicles-showcase,
+  .card-actions {
+    padding: 1rem;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .popular-info {
+    margin: 2rem -1rem 0 -1rem;
+    border-radius: 0;
+  }
+}
+</style>

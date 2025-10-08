@@ -1,0 +1,315 @@
+<% if (title) { %>
+  <h1><%= title %></h1>
+<% } else {
+  res.redirect('/')
+} %>
+
+<%- messages() %>
+
+<div class="edit-comparison-container">
+  <div class="edit-form-section">
+    <h2>Update Comparison Details</h2>
+
+    <form method="POST" action="/compare/update/<%= comparison.comparison_id %>" class="edit-comparison-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="comparison_name">Comparison Name *</label>
+          <input type="text"
+                 id="comparison_name"
+                 name="comparison_name"
+                 value="<%= comparison.comparison_name %>"
+                 required
+                 maxlength="100"
+                 class="form-control">
+          <small class="form-text">Give your comparison a descriptive name</small>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="comparison_description">Description</label>
+          <textarea id="comparison_description"
+                    name="comparison_description"
+                    rows="3"
+                    maxlength="500"
+                    class="form-control"
+                    placeholder="Optional: Add notes about this comparison..."><%= comparison.comparison_description || '' %></textarea>
+          <small class="form-text">Maximum 500 characters</small>
+        </div>
+      </div>
+
+      <!-- Hidden inputs for vehicle IDs -->
+      <% if (comparison.vehicle1_id) { %>
+        <input type="hidden" name="vehicle1_id" value="<%= comparison.vehicle1_id %>">
+      <% } %>
+      <% if (comparison.vehicle2_id) { %>
+        <input type="hidden" name="vehicle2_id" value="<%= comparison.vehicle2_id %>">
+      <% } %>
+      <% if (comparison.vehicle3_id) { %>
+        <input type="hidden" name="vehicle3_id" value="<%= comparison.vehicle3_id %>">
+      <% } %>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Update Comparison</button>
+        <a href="/compare/my-comparisons" class="btn btn-outline">Cancel</a>
+      </div>
+    </form>
+  </div>
+
+  <div class="vehicles-section">
+    <h2>Vehicles in This Comparison</h2>
+
+    <div class="current-vehicles">
+      <% if (vehicles && vehicles.length > 0) { %>
+        <% vehicles.forEach(function(vehicle, index) { %>
+          <div class="vehicle-card">
+            <div class="vehicle-info">
+              <% if (vehicle.inv_thumbnail) { %>
+                <img src="<%= vehicle.inv_thumbnail %>"
+                     alt="<%= vehicle.inv_make %> <%= vehicle.inv_model %>"
+                     onerror="this.src='/images/vehicles/no-image-tn.png'">
+              <% } else { %>
+                <img src="/images/vehicles/no-image-tn.png" alt="No image available">
+              <% } %>
+
+              <div class="vehicle-details">
+                <h4><%= vehicle.inv_year %> <%= vehicle.inv_make %> <%= vehicle.inv_model %></h4>
+                <p class="price">$<%= vehicle.inv_price.toLocaleString() %></p>
+                <p class="mileage"><%= vehicle.inv_miles.toLocaleString() %> miles</p>
+              </div>
+            </div>
+
+            <div class="vehicle-actions">
+              <a href="/inv/detail/<%= vehicle.inv_id %>" class="btn btn-sm btn-outline">View Details</a>
+            </div>
+          </div>
+        <% }); %>
+      <% } %>
+    </div>
+
+    <div class="change-vehicles-notice">
+      <p><strong>Need to change vehicles?</strong></p>
+      <p>To modify which vehicles are compared, create a new comparison with your desired selection.</p>
+      <a href="/compare/select" class="btn btn-secondary">Create New Comparison</a>
+    </div>
+  </div>
+</div>
+
+<style>
+.edit-comparison-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.edit-form-section,
+.vehicles-section {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.edit-form-section h2,
+.vehicles-section h2 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: #495057;
+  border-bottom: 2px solid #e9ecef;
+  padding-bottom: 0.5rem;
+}
+
+.form-row {
+  margin-bottom: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #495057;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 1rem;
+  line-height: 1.5;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-control:focus {
+  border-color: #80bdff;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.form-text {
+  color: #6c757d;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e9ecef;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  text-decoration: none;
+  display: inline-block;
+  font-weight: 500;
+  text-align: center;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 1rem;
+}
+
+.btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+}
+
+.btn-primary { background: #007bff; color: white; border-color: #007bff; }
+.btn-secondary { background: #6c757d; color: white; border-color: #6c757d; }
+.btn-outline { background: transparent; color: #007bff; border-color: #007bff; }
+
+.btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.current-vehicles {
+  margin-bottom: 2rem;
+}
+
+.vehicle-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  background: #f8f9fa;
+}
+
+.vehicle-card:last-child {
+  margin-bottom: 0;
+}
+
+.vehicle-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+.vehicle-info img {
+  width: 80px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.vehicle-details h4 {
+  margin: 0 0 0.5rem 0;
+  color: #495057;
+  font-size: 1.1rem;
+}
+
+.vehicle-details p {
+  margin: 0.25rem 0;
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+.price {
+  font-weight: 600;
+  color: #28a745 !important;
+  font-size: 1rem !important;
+}
+
+.vehicle-actions {
+  flex-shrink: 0;
+}
+
+.change-vehicles-notice {
+  background: #e7f3ff;
+  border: 1px solid #b3d9ff;
+  border-radius: 6px;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.change-vehicles-notice p {
+  margin: 0 0 1rem 0;
+  color: #495057;
+}
+
+.change-vehicles-notice p:last-of-type {
+  margin-bottom: 1.5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .edit-comparison-container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .edit-form-section,
+  .vehicles-section {
+    padding: 1.5rem;
+  }
+
+  .vehicle-card {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .vehicle-info {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .vehicle-actions {
+    align-self: center;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .edit-form-section,
+  .vehicles-section {
+    padding: 1rem;
+  }
+
+  .vehicle-info {
+    flex-direction: row;
+    text-align: left;
+  }
+
+  .vehicle-info img {
+    width: 60px;
+    height: 45px;
+  }
+}
+</style>

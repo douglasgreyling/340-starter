@@ -17,6 +17,7 @@ const static = require("./routes/static");
 const baseController = require("./controllers/baseController");
 const inventoryRoute = require("./routes/inventoryRoute");
 const accountRoute = require("./routes/accountRoute");
+const comparisonRoute = require("./routes/comparisonRoute");
 const errorRoute = require("./routes/errorRoute");
 const utilities = require("./utilities/");
 
@@ -59,6 +60,7 @@ app.use(static);
 app.get("/", utilities.handleErrors(baseController.buildHome));
 app.use("/inv", utilities.handleErrors(inventoryRoute));
 app.use("/account", utilities.handleErrors(accountRoute));
+app.use("/compare", utilities.handleErrors(comparisonRoute));
 app.use("/error", utilities.handleErrors(errorRoute));
 app.use(async (req, res, next) => {
   next({ status: 404, message: "Sorry, we appear to have lost that page." });
